@@ -1,196 +1,61 @@
 import streamlit as st
 
-# 16가지 MBTI별 추천 데이터 (색깔, 동물, IT 브랜드(로고URL), 옷 브랜드(로고URL))
-mbti_info = {
-    "INTJ": {
-        "color": "#5A3EBD",
-        "animal": "🦉 부엉이",
-        "it_brand": ("Apple 🍎", "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg"),
-        "clothing_brand": ("Uniqlo 👕", "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Uniqlo_logo.svg/1200px-Uniqlo_logo.svg.png"),
-    },
-    "INTP": {
-        "color": "#336699",
-        "animal": "🦅 독수리",
-        "it_brand": ("Microsoft 🪟", "https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg"),
-        "clothing_brand": ("Gap 🧥", "https://upload.wikimedia.org/wikipedia/commons/3/3a/Gap_logo.svg"),
-    },
-    "ENTJ": {
-        "color": "#FF4500",
-        "animal": "🦁 사자",
-        "it_brand": ("Tesla ⚡", "https://upload.wikimedia.org/wikipedia/commons/b/bd/Tesla_Motors.svg"),
-        "clothing_brand": ("Nike 👟", "https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg"),
-    },
-    "ENTP": {
-        "color": "#FF69B4",
-        "animal": "🦊 여우",
-        "it_brand": ("Google 🔍", "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg"),
-        "clothing_brand": ("Adidas 🏃‍♂️", "https://upload.wikimedia.org/wikipedia/commons/2/20/Adidas_Logo.svg"),
-    },
-    "INFJ": {
-        "color": "#6A5ACD",
-        "animal": "🦢 백조",
-        "it_brand": ("Adobe 🎨", "https://upload.wikimedia.org/wikipedia/commons/d/d7/Adobe_Corporate_Logo.svg"),
-        "clothing_brand": ("H&M 👗", "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/H%26M-Logo.svg/1200px-H%26M-Logo.svg.png"),
-    },
-    "INFP": {
-        "color": "#3CB371",
-        "animal": "🦋 나비",
-        "it_brand": ("Spotify 🎵", "https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg"),
-        "clothing_brand": ("Forever 21 🌸", "https://upload.wikimedia.org/wikipedia/commons/7/7a/Forever_21_logo.svg"),
-    },
-    "ENFJ": {
-        "color": "#FF6347",
-        "animal": "🐦 제비",
-        "it_brand": ("Facebook 📘", "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg"),
-        "clothing_brand": ("Zara 👚", "https://upload.wikimedia.org/wikipedia/commons/5/5a/Zara_Logo.svg"),
-    },
-    "ENFP": {
-        "color": "#FFA500",
-        "animal": "🐆 치타",
-        "it_brand": ("Twitter 🐦", "https://upload.wikimedia.org/wikipedia/en/6/60/Twitter_Logo_as_of_2021.svg"),
-        "clothing_brand": ("Levi's 👖", "https://upload.wikimedia.org/wikipedia/commons/2/29/Levis_logo.svg"),
-    },
-    "ISTJ": {
-        "color": "#2E8B57",
-        "animal": "🐢 거북이",
-        "it_brand": ("IBM 💻", "https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg"),
-        "clothing_brand": ("Dockers 👔", "https://upload.wikimedia.org/wikipedia/commons/e/e8/Dockers_logo.svg"),
-    },
-    "ISFJ": {
-        "color": "#FFB6C1",
-        "animal": "🐿️ 다람쥐",
-        "it_brand": ("Canon 📷", "https://upload.wikimedia.org/wikipedia/commons/4/40/Canon_logo.svg"),
-        "clothing_brand": ("GAP Kids 👕", "https://upload.wikimedia.org/wikipedia/commons/3/3a/Gap_logo.svg"),
-    },
-    "ESTJ": {
-        "color": "#4682B4",
-        "animal": "🐺 늑대",
-        "it_brand": ("Intel 🖥️", "https://upload.wikimedia.org/wikipedia/commons/c/c9/Intel-logo.svg"),
-        "clothing_brand": ("Tommy Hilfiger 👔", "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Tommy_Hilfiger_logo.svg/1280px-Tommy_Hilfiger_logo.svg.png"),
-    },
-    "ESFJ": {
-        "color": "#FF69B4",
-        "animal": "🐩 푸들",
-        "it_brand": ("Samsung 📱", "https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg"),
-        "clothing_brand": ("Forever 21 👗", "https://upload.wikimedia.org/wikipedia/commons/7/7a/Forever_21_logo.svg"),
-    },
-    "ISTP": {
-        "color": "#708090",
-        "animal": "🦅 매",
-        "it_brand": ("GoPro 📷", "https://upload.wikimedia.org/wikipedia/commons/5/5d/GoPro_logo.svg"),
-        "clothing_brand": ("The North Face 🧥", "https://upload.wikimedia.org/wikipedia/commons/6/66/The_North_Face_logo.svg"),
-    },
-    "ISFP": {
-        "color": "#FFDEAD",
-        "animal": "🐰 토끼",
-        "it_brand": ("Nintendo 🎮", "https://upload.wikimedia.org/wikipedia/commons/0/0d/Nintendo.svg"),
-        "clothing_brand": ("Free People 🌸", "https://upload.wikimedia.org/wikipedia/commons/5/56/Free_People_Logo.svg"),
-    },
-    "ESTP": {
-        "color": "#FF8C00",
-        "animal": "🐅 호랑이",
-        "it_brand": ("Snapchat 👻", "https://upload.wikimedia.org/wikipedia/en/c/c4/Snapchat_logo.svg"),
-        "clothing_brand": ("Puma 👟", "https://upload.wikimedia.org/wikipedia/commons/f/fd/Puma_logo.svg"),
-    },
-    "ESFP": {
-        "color": "#FF6F61",
-        "animal": "🐆 치타",
-        "it_brand": ("Samsung 📱", "https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg"),
-        "clothing_brand": ("Zara 👗", "https://upload.wikimedia.org/wikipedia/commons/5/5a/Zara_Logo.svg"),
-    },
+# MBTI별 추천 색상 및 옷 코디 이미지
+mbti_styles = {
+    "INTJ": {"color": "#5A3EBD", "style_desc": "세련된 미니멀 블랙룩 🖤", "image": "https://i.pinimg.com/originals/34/1f/5f/341f5f98cf57b84e7125b0c2f645c54f.jpg"},
+    "INTP": {"color": "#336699", "style_desc": "편안한 스트릿룩 😎", "image": "https://i.pinimg.com/originals/59/82/6d/59826d7bc4c61a84d8418d68c9c8ac31.jpg"},
+    "ENTJ": {"color": "#FF4500", "style_desc": "시크한 수트 스타일 👔", "image": "https://i.pinimg.com/originals/27/ef/3a/27ef3aa7d6a19a68fc84ff22efc4a6cf.jpg"},
+    "ENTP": {"color": "#FF69B4", "style_desc": "개성만점 컬러풀 캐주얼 ✨", "image": "https://i.pinimg.com/originals/63/91/57/6391575c13d5c7f0b999ac4b8dc80da1.jpg"},
+    "INFJ": {"color": "#6A5ACD", "style_desc": "몽환적인 레이어드룩 🌙", "image": "https://i.pinimg.com/originals/fc/56/9a/fc569a97b3b92d81c3c69f8a14f6e11b.jpg"},
+    "INFP": {"color": "#3CB371", "style_desc": "빈티지 로맨틱 무드 🌼", "image": "https://i.pinimg.com/originals/f7/3d/cd/f73dcd201c46477be4073e7b05f2c94e.jpg"},
+    "ENFJ": {"color": "#FF6347", "style_desc": "우아한 오피스룩 💼", "image": "https://i.pinimg.com/originals/c3/b6/e3/c3b6e3e62148e7eeff3426c65ceec597.jpg"},
+    "ENFP": {"color": "#FFA500", "style_desc": "발랄한 캐주얼 믹스룩 🧡", "image": "https://i.pinimg.com/originals/42/14/4f/42144f64c4d56f849725510cfda0b7b3.jpg"},
+    "ISTJ": {"color": "#2E8B57", "style_desc": "정갈한 클래식룩 🟢", "image": "https://i.pinimg.com/originals/b3/3f/0f/b33f0f29d39d68c4b50cf3aa4c9d2973.jpg"},
+    "ISFJ": {"color": "#FFB6C1", "style_desc": "따뜻한 내추럴룩 🌸", "image": "https://i.pinimg.com/originals/9e/f3/91/9ef391f597c08c75a16390df68edda3d.jpg"},
+    "ESTJ": {"color": "#4682B4", "style_desc": "깔끔한 셋업 스타일 💼", "image": "https://i.pinimg.com/originals/b0/f8/33/b0f833b60f84c73e08b4802e7e5c2c95.jpg"},
+    "ESFJ": {"color": "#FF69B4", "style_desc": "화사한 데이트룩 💖", "image": "https://i.pinimg.com/originals/2d/c4/1b/2dc41bc4f4746409e3fa2bd14a9c57c9.jpg"},
+    "ISTP": {"color": "#708090", "style_desc": "심플한 워크웨어룩 🛠️", "image": "https://i.pinimg.com/originals/6e/2b/f4/6e2bf45a31e61aef207b3dfb2019ab4b.jpg"},
+    "ISFP": {"color": "#FFDEAD", "style_desc": "귀여운 내추럴 캐주얼 🐰", "image": "https://i.pinimg.com/originals/4c/c7/c3/4cc7c3e931145f85d2dfaf9ae5dfbd7e.jpg"},
+    "ESTP": {"color": "#FF8C00", "style_desc": "트렌디한 스트릿룩 🧢", "image": "https://i.pinimg.com/originals/38/2d/c6/382dc69c5e725be8c02fbb998d6f53b1.jpg"},
+    "ESFP": {"color": "#FF6F61", "style_desc": "큐티 & 화려한 파티룩 🎉", "image": "https://i.pinimg.com/originals/5b/c6/31/5bc631f7de933dbd589c3153f47f3a4b.jpg"},
 }
 
-mbti_list = list(mbti_info.keys())
+st.set_page_config(page_title="MBTI 스타일 추천 💖", layout="centered")
 
-# 페이지 설정
-st.set_page_config(page_title="🌈 MBTI 스타일 추천", layout="centered")
+st.markdown("""
+    <style>
+    .stApp {
+        transition: background-color 1s ease;
+        font-family: "Comic Sans MS", cursive;
+    }
+    h1, h2 {
+        text-align: center;
+    }
+    img {
+        display: block;
+        margin: 0 auto;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        max-width: 80%;
+    }
+    </style>
+""", unsafe_allow_html=True)
 
-# 기본 스타일 CSS + 귀여운 효과
-def local_css():
-    st.markdown(
-        """
-        <style>
-        .stApp {
-            font-family: 'Comic Sans MS', cursive, sans-serif;
-            transition: background-color 1s ease;
-            padding: 30px;
-        }
-        h1 {
-            text-align: center;
-            font-weight: 900;
-            color: #222;
-            text-shadow: 2px 2px 5px #aaa;
-        }
-        .result {
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            color: white;
-            margin-top: 30px;
-            animation: fadeIn 1s ease forwards;
-        }
-        .item-row {
-            display: flex;
-            align-items: center;
-            margin: 15px 0;
-            font-size: 1.3rem;
-        }
-        .item-row img {
-            height: 40px;
-            margin-left: 15px;
-            border-radius: 8px;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-            transition: transform 0.3s ease;
-            cursor: pointer;
-        }
-        .item-row img:hover {
-            transform: scale(1.1);
-        }
-        @keyframes fadeIn {
-            from {opacity: 0; transform: translateY(20px);}
-            to {opacity: 1; transform: translateY(0);}
-        }
-        .emoji {
-            font-size: 2rem;
-            margin-right: 10px;
-            user-select: none;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
+st.title("🌟 MBTI별 어울리는 스타일 추천 💃")
 
-local_css()
+mbti = st.selectbox("당신의 MBTI는 무엇인가요? 🤔", list(mbti_styles.keys()))
 
-st.title("🎉 MBTI 스타일 추천 웹앱 🥳")
+if st.button("결과 보러 가기! 🎁"):
+    color = mbti_styles[mbti]["color"]
+    style = mbti_styles[mbti]["style_desc"]
+    image = mbti_styles[mbti]["image"]
 
-selected_mbti = st.selectbox("✨ 당신의 MBTI를 선택해 주세요! ✨", mbti_list)
-
-if st.button("결과 보러 가기 👉"):
-    info = mbti_info[selected_mbti]
-    bg_color = info["color"]
-
-    # 배경색 변경 JS
-    st.markdown(
-        f"""
+    st.markdown(f"""
         <script>
-        document.querySelector('.stApp').style.backgroundColor = '{bg_color}';
+        document.querySelector('.stApp').style.backgroundColor = '{color}';
         </script>
-        """,
-        unsafe_allow_html=True,
-    )
+    """, unsafe_allow_html=True)
 
-    st.markdown(
-        f"""
-        <div class="result" style="background-color:{bg_color};">
-        <h2>🎯 {selected_mbti} 당신에게 딱 맞는 스타일은?</h2>
-        <div class="item-row"><span class="emoji">🌈</span> 어울리는 색깔: <strong>{bg_color}</strong></div>
-        <div class="item-row"><span class="emoji">🐾</span> 당신의 동물: <strong>{info['animal']}</strong></div>
-        <div class="item-row"><span class="emoji">💻</span> IT 브랜드: <strong>{info['it_brand'][0]}</strong> <img src="{info['it_brand'][1]}" alt="IT 브랜드 로고"></div>
-        <div class="item-row"><span class="emoji">👚</span> 옷 브랜드: <strong>{info['clothing_brand'][0]}</strong> <img src="{info['clothing_brand'][1]}" alt="옷 브랜드 로고"></div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-else:
-    st.info("위에서 MBTI를 선택하고 '결과 보러 가기' 버튼을 눌러주세요! 🥰")
+    st.markdown(f"<h2>✨ {mbti}에게 어울리는 색깔은 <span style='color:white'>{color}</span> 💗</h2>", unsafe_allow_html=True)
+    st.markdown(f"<h3>👗 추천 스타일: {style}</h3>", unsafe_allow_html=True)
+    st.image(image, caption="감각적인 코디 예시 ✨")
